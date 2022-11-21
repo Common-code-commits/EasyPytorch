@@ -1,12 +1,13 @@
+import abc
 from typing import Tuple, IO, Iterator, Union, TypeVar
 from torch.utils.data.dataset import T_co
 from torchdata.datapipes.iter import IterDataPipe
 from polars import read_csv
+
 D = TypeVar("D")
 
 
-class CsvReader(IterDataPipe):
-
+class TextReader(IterDataPipe):
     def __getitem__(self, index) -> T_co:
         pass
 
@@ -28,16 +29,6 @@ class CsvReader(IterDataPipe):
         self.errors = errors
         self.return_path = return_path
 
-    def read_file(self, file):
-        yield from read_csv(
-            file,
-            has_header=False,
-            skip_rows=self.skip_lines,
-            encoding=self.encoding,
-            ignore_errors=self.errors,
-            **self.fmtparams
-        ).rows()
-
     def _return_path(self, path, datas):
         if self.return_path:
             for data in datas:
@@ -49,3 +40,33 @@ class CsvReader(IterDataPipe):
         for path, file in self.source_datapipe:
             stream = self.read_file(file)
             yield from self._return_path(path, stream)
+
+    @abc.abstractmethod
+    def read_file(self, file):
+        raise NotImplementedError
+
+
+class CsvReader(TextReader):
+
+    def read_file(self, file):
+        yield from read_csv(
+            file,
+            has_header=False,
+            skip_rows=self.skip_lines,
+            encoding=self.encoding,
+            ignore_errors=self.errors,
+            **self.fmtparams
+        ).rows()
+
+
+class XmlReader(TextReader):
+
+    def read_file(self, file):
+        yield from read_csv(
+            file,
+            has_header=False,
+            skip_rows=self.skip_lines,
+            encoding=self.encoding,
+            ignore_errors=self.errors,
+            **self.fmtparams
+        ).rows()

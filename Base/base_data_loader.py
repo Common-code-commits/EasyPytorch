@@ -1,6 +1,6 @@
 from torch import tensor
 from torchdata.dataloader2 import DataLoader2
-from EasyPytorch.Config import Config
+from Config import Config
 
 
 class BaseDataLoader(DataLoader2):

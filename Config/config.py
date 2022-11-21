@@ -1,8 +1,9 @@
 from os.path import dirname, join
-from utils import read_json
+from Utils import read_json
 
 
 class OnlyReadConfig:
+    attrs = {}
 
     def _unable_write(self):
         self.enable_write = False
@@ -24,18 +25,18 @@ class OnlyReadConfig:
     def __getattr__(self, key):
         return None
 
+    def __str__(self):
+        return str(self.attrs)
+
+    def dict(self):
+        return self.attrs
+
 
 class AttrConfig(OnlyReadConfig):
     def __init__(self, attrs=None):
         self.attrs = attrs
         self._setattr(attrs)
         self._unable_write()
-
-    def __str__(self):
-        return str(self.attrs)
-
-    def dict(self):
-        return self.attrs
 
 
 class Config(OnlyReadConfig):
@@ -53,9 +54,3 @@ class Config(OnlyReadConfig):
             self._setattr(self.attrs)
             self._flag = False
             self._unable_write()
-
-    def __str__(self):
-        return str(self.attrs)
-
-    def dict(self):
-        return self.attrs

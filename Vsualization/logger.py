@@ -2,8 +2,8 @@ from logging import basicConfig, INFO, getLogger
 from logging.config import dictConfig
 from os.path import join, exists
 
-from EasyPytorch.Config import Config
-from utils import read_json
+from Config import Config
+from Utils import read_json
 
 
 class Logger:

@@ -1,8 +1,8 @@
 import torch
 from torchdata.datapipes.iter import FileLister
-from EasyPytorch.Base import BaseDataLoader
-from EasyPytorch.Config import Config
-from EasyPytorch.DataLoader.DataPipe.textreader import CsvReader
+from Base import BaseDataLoader
+from Config import Config
+from DataLoader.DataPipe.textreader import CsvReader
 from re import sub
 
 

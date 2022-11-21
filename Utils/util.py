@@ -1,5 +1,4 @@
 import json
-import torch
 import pandas as pd
 from pathlib import Path
 from collections import OrderedDict
@@ -24,8 +23,10 @@ def write_json(content, fname):
 
 
 class MetricTracker:
-    def __init__(self, *keys, writer=None):
+    def __init__(self, name, *keys, writer):
         self.writer = writer
+        self._name = name
+        keys = ["{0}_{1}".format(name, key) for key in keys]
         self._data = pd.DataFrame(index=keys, columns=['total', 'counts', 'average'])
         self.reset()
 
@@ -34,8 +35,8 @@ class MetricTracker:
             self._data[col].values[:] = 0
 
     def update(self, key, value, n=1):
-        if self.writer is not None:
-            self.writer.add_scalar(key, value)
+        key = "{0}_{1}".format(self._name, key)
+        self.writer.add_scalar(key, value)
         self._data.total[key] += value * n
         self._data.counts[key] += n
         self._data.average[key] = self._data.total[key] / self._data.counts[key]

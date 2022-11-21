@@ -7,10 +7,8 @@ class BaseModel(nn.Module):
     """
     Base class for all models
     """
-    def __new__(cls, *args, **kwargs):
-        instance = super().__new__(cls)
+    def __init__(self):
         super().__init__()
-        return instance
 
     @abstractmethod
     def forward(self, *inputs):
